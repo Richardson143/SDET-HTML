@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Interactive Test Scenario Generator</h1>
+<form action="{{ url_for('main.test_idea_generation') }}" method="post" enctype="multipart/form-data">
+    <label for="url">Enter the URL of the webpage you want to test:</label>
+    <input type="text" id="url" name="url" required>
+    <button type="button" id="start-element-selection">Start Element Selection</button>
+    <div id="selected-elements-section" style="display: none;">
+        <button type="button" id="check-selected-elements">Check Selected Elements</button>
+        <button type="submit" id="generate-test-scenarios">Generate Test Scenarios</button>
+    </div>
+    <input type="hidden" id="selected_elements" name="selected_elements">
+    <input type="hidden" id="screenshot" name="screenshot">
+</form>
+<div id="test-scenarios">
+    {% if test_scenarios %}
+    <h2>Generated Test Scenarios</h2>
+    <pre>{{ test_scenarios }}</pre>
+    {% endif %}
+</div>
+
+<script>
+document.getElementById('start-element-selection').addEventListener('click', function() {
+    var url = document.getElementById('url').value;
+    fetch('/setup-interactive-browser', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'url=' + encodeURIComponent(url)
+    }).then(response => response.json())
+      .then(data => {
+          if (data.status === 'success') {
+              document.getElementById('selected-elements-section').style.display = 'block';
+          }
+      });
+});
+
+document.getElementById('check-selected-elements').addEventListener('click', function() {
+    fetch('/get-selected-elements')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('selected_elements').value = JSON.stringify(data);
+            console.log('Selected Elements:', data);
+        });
+});
+
+document.getElementById('generate-test-scenarios').addEventListener('click', function() {
+    fetch('/capture-screenshot')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('screenshot').value = data.screenshot;
+            document.querySelector('form').submit();
+        });
+});
+</script>
+{% endblock %}

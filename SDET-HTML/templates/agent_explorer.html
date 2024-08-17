@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Agent Explorer</h1>
+<form action="{{ url_for('main.agent_explorer') }}" method="post">
+    <label for="objective">Objective:</label>
+    <input type="text" id="objective" name="objective" required>
+    <label for="url">URL:</label>
+    <input type="text" id="url" name="url" required>
+    <button type="submit">Start Demo</button>
+</form>
+{% if result %}
+<h2>Demo Result</h2>
+<pre>{{ result }}</pre>
+{% endif %}
+{% endblock %}

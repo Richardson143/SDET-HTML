@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Gherkin Generator</h1>
+<form action="{{ url_for('main.gherkin_generator') }}" method="post">
+    <label for="user_story">User Story:</label>
+    <textarea id="user_story" name="user_story" required></textarea>
+    <label for="detail_level">Detail Level:</label>
+    <select id="detail_level" name="detail_level" required>
+        <option value="Simple">Simple</option>
+        <option value="Detailed">Detailed</option>
+    </select>
+    <button type="submit">Generate Gherkin Feature</button>
+</form>
+{% if gherkin_feature %}
+<h2>Generated Gherkin Feature</h2>
+<pre>{{ gherkin_feature }}</pre>
+{% endif %}
+{% endblock %}

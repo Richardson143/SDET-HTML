@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Element Inspector</h1>
+<form action="{{ url_for('main.element_inspector') }}" method="post">
+    <label for="url">URL:</label>
+    <input type="text" id="url" name="url" required>
+    <label for="output_file">Output File:</label>
+    <input type="text" id="output_file" name="output_file" value="elements.csv" required>
+    <button type="submit">Identify Elements</button>
+</form>
+{% endblock %}
